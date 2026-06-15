@@ -12,6 +12,9 @@ stripe.api_key = STRIPE_SECRET
 
 def fetch_stripe_mrr():
     # Pull all active subscriptions and sum their monthly amount (in cents)
+    if not STRIPE_SECRET or STRIPE_SECRET == '***':
+        print('Stripe API key missing or masked – skipping Stripe MRR fetch')
+        return 0
     total = 0
     for sub in stripe.Subscription.list(status='active', limit=100):
         for item in sub['items']['data']:
